@@ -14,8 +14,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/** Opening line from Dr. MediSage shown on every fresh chat (matches Screen3.0). */
+const val DR_GREETING: String =
+    "Hello, I am Dr. MediSage, your AI medical assistant. How can I assist with " +
+        "your clinical consultation or patient data today?"
+
+private fun greetingMessage() = ChatMessage(text = DR_GREETING, sender = Sender.AI)
+
 data class ChatUiState(
-    val messages: List<ChatMessage> = emptyList(),
+    val messages: List<ChatMessage> = listOf(greetingMessage()),
     val isStreaming: Boolean = false,
     val error: String? = null,
 )
@@ -27,6 +34,18 @@ class ChatViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ChatUiState())
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
+
+    /** Clears the conversation back to a blank instance (just the greeting). Powers "+ New Chat". */
+    fun startNewChat() {
+        _uiState.value = ChatUiState()
+    }
+
+    /** Loads a (mocked) history transcript into the chat, replacing the current conversation. */
+    fun loadSession(messages: List<ChatMessage>) {
+        _uiState.value = ChatUiState(
+            messages = messages.ifEmpty { listOf(greetingMessage()) },
+        )
+    }
 
     fun sendMessage(text: String) {
         val trimmed = text.trim()

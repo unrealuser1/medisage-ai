@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.unreal.medisageai.ui.chat.ChatScreen
+import com.unreal.medisageai.ui.navigation.MediSageNavHost
 import com.unreal.medisageai.ui.theme.MediSageAITheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MediSageAITheme {
-                ChatScreen()
+                MediSageNavHost()
             }
         }
     }
